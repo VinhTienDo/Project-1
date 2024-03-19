@@ -2,17 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Warrior : MonoBehaviour
+public class Warrior : Entity
 {
 
-    public Rigidbody2D rb;
-    public Animator anim;
+
     [Header("Move")]
     public float moveSpeed;
     public float jumpForce;
 
-    private int facingDirection = 1;
-    private bool facingRight = true;
+
     private float xInput;
 
     [Header("Attack")]
@@ -28,24 +26,23 @@ public class Warrior : MonoBehaviour
     [SerializeField] private float dashCooldown;
     private float dashCooldownTimer;
 
-    [Header("Ground Check")]
-    [SerializeField] private float groundCheck;
-    [SerializeField] private LayerMask whatIsGround;
-    private bool isGrounded;
+    
     
 
-    void Start()
+    protected override void Start()
     {
-       rb = GetComponent<Rigidbody2D>();
-       anim = GetComponent<Animator>();
+        base.Start();
     }
 
+
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
+        base.Update();
+
         Movement();
         CheckInput();
-        CollisionCheck();
+        
 
         
         dashTime -= Time.deltaTime;
@@ -69,10 +66,7 @@ public class Warrior : MonoBehaviour
         
     }
 
-    private void CollisionCheck()
-    {
-        isGrounded = Physics2D.Raycast(transform.position, Vector2.down, groundCheck, whatIsGround);
-    }
+
 
     private void AnimatorController()
     {
@@ -149,12 +143,7 @@ public class Warrior : MonoBehaviour
         }
     }
 
-    private void Flip()
-    {
-        facingDirection = facingDirection * -1;
-        facingRight = !facingRight;
-        transform.Rotate(0, 180, 0);
-    }
+
 
     private void FlipController()
     {
@@ -165,9 +154,5 @@ public class Warrior : MonoBehaviour
         
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawLine(transform.position, new Vector3(transform.position.x,
-            transform.position.y - groundCheck));
-    }
+
 }
